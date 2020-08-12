@@ -2,3 +2,4 @@
 src/lib/
 src/Buggy_Context_Abstraction/abstraction/target/
 __pycache__/
+.idea/*

@@ -1,6 +1,6 @@
 # SequenceR: SequenceR: Sequence-to-Sequence Learning for End-to-End Program Repair
 
-SequenceR is a seq2seq model designed to predict source code change on line level. The [paper](http://arxiv.org/pdf/1901.01808) explains the approach.
+SequenceR is a seq2seq model designed to predict source code change on line level. The [paper](http://arxiv.org/pdf/1901.01808) ([doi:10.1109/TSE.2019.2940179](https://doi.org/10.1109/TSE.2019.2940179)) explains the approach.
 
 If you use SequenceR for academic purposes, please cite the following publication:
 ```
@@ -47,11 +47,11 @@ Then run `src/sequencer-predict.sh` with the following parameters:
 
 ## Experiments
 
-### Data
+### CodRep experiment
 
 The training data consists of `results/Golden/src-train.txt` and `results/Golden/tgt-train.txt` (line to line correspondence).
 
-The testing data consists of `results/Golden/src-test.txt` and `results/Golden/tgt-test.txt` (line to line correspondence).
+The CodRep4 testing data consists of `results/Golden/src-test.txt` and `results/Golden/tgt-test.txt` (line to line correspondence).
 
 ### Defects4J experiment
 
@@ -72,7 +72,6 @@ SequenceR uses the OpenNMT library to set up program repair as a translation fro
 Choose a directory and:
 ```bash
 git clone https://github.com/OpenNMT/OpenNMT-py
-git clone https://github.com/kth-tcs/seq2seq4repair-experiments.git
 ```
 When testing a new configuration, copy a working data directory and modify *sh files as desired.
 
@@ -81,7 +80,6 @@ Set up environment variables:
 ```bash
 export CUDA_VISIBLE_DEVICES=0
 export THC_CACHING_ALLOCATOR=0
-export seq2seq4repair=.../seq2seq4repair-experiments
 export OpenNMT_py=.../OpenNMT-py
 export data_path=.../results/Golden  # Or a new directory path as desired
 ```

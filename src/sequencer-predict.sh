@@ -1,11 +1,11 @@
-#! /bin/bash
+#!/bin/bash
 
 echo "sequencer-predict.sh start"
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 ROOT_DIR="$(dirname "$CURRENT_DIR")"
 
-HELP_MESSAGE=$'Usage: ./sequencer-predict.sh --buggy_file=[abs path] --buggy_line=[int] --beam_size=[int] --output=[abs path]
+HELP_MESSAGE=$'Usage: ./sequencer-predict.sh --model=[model path]--buggy_file=[abs path] --buggy_line=[int] --beam_size=[int] --output=[abs path]
 buggy_file: Absolute path to the buggy file
 buggy_line: Line number of buggy line
 beam_size: Beam size used in seq2seq model
@@ -27,6 +27,10 @@ case $i in
     ;;
     --output=*)
     OUTPUT="${i#*=}"
+    shift # past argument=value
+    ;;
+    --model=*)
+    MODEL="${i#*=}"
     shift # past argument=value
     ;;
     *)
@@ -67,6 +71,16 @@ elif [[ "$OUTPUT" != /* ]]; then
   exit 1
 fi
 
+if [ -z "$MODEL" ]; then
+  echo "MODEL unset!"
+  echo "$HELP_MESSAGE"
+  exit 1
+elif [[ "$MODEL" != /* ]]; then
+  echo "MODEL must be absolute path"
+  echo "$HELP_MESSAGE"
+  exit 1
+fi
+
 echo "Input parameter:"
 echo "BUGGY_FILE_PATH = ${BUGGY_FILE_PATH}"
 echo "BUGGY_LINE = ${BUGGY_LINE}"
@@ -83,7 +97,7 @@ echo
 
 echo "Abstracting the source file"
 # the code of abstraction-1.0-SNAPSHOT-jar-with-dependencies.jar is in https://github.com/KTH/sequencer/tree/master/src/Buggy_Context_Abstraction/abstraction
-java -jar $CURRENT_DIR/lib/abstraction-1.0-SNAPSHOT-jar-with-dependencies.jar $BUGGY_FILE_PATH $BUGGY_LINE $CURRENT_DIR/tmp
+java -jar $CURRENT_DIR/Buggy_Context_Abstraction/abstraction/lib/abstraction-1.0-SNAPSHOT-jar-with-dependencies.jar $BUGGY_FILE_PATH $BUGGY_LINE $CURRENT_DIR/tmp
 retval=$?
 if [ $retval -ne 0 ]; then
   echo "Cannot generate abstraction for the buggy file"
@@ -113,7 +127,7 @@ fi
 echo
 
 echo "Generating predictions"
-python3 $CURRENT_DIR/lib/OpenNMT-py/translate.py -model $ROOT_DIR/model/model.pt -src $CURRENT_DIR/tmp/${BUGGY_FILE_BASENAME}_abstract_tokenized_truncated.txt -output $CURRENT_DIR/tmp/predictions.txt -beam_size $BEAM_SIZE -n_best $BEAM_SIZE 1>/dev/null
+python3 $CURRENT_DIR/lib/OpenNMT-py/translate.py -model $MODEL -src $CURRENT_DIR/tmp/${BUGGY_FILE_BASENAME}_abstract_tokenized_truncated.txt -output $CURRENT_DIR/tmp/predictions.txt -beam_size $BEAM_SIZE -n_best $BEAM_SIZE 1>/dev/null
 echo
 
 echo "Post process predictions"
