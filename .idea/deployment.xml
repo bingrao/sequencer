@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="bing@10.173.204.214:22">
+  <component name="PublishConfigData" serverName="sequenceR@bing@10.173.204.214:22">
     <serverData>
       <paths name="Table_Gan@forcebot@184.90.192.146:1234 password">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="bing@10.173.204.214:22">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/home/bing/project/sequenceR" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
@@ -23,7 +16,17 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="sequenceR@bing@10.173.204.214:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/bing/project/sequenceR" local="$PROJECT_DIR$" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/model" />
+            <excludedPath local="true" path="$PROJECT_DIR$/results" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
     </serverData>
-    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
